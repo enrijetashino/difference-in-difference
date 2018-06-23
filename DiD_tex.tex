@@ -1,0 +1,234 @@
+\documentclass[a4paper]{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc} 
+\usepackage{amsmath,amssymb}
+\usepackage{parskip} 
+\usepackage[usenames,dvipsnames,table]{xcolor} 
+\usepackage{fancyvrb} 
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref} 
+\DeclareMathOperator{\E}{\mathbb{E}}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\usepackage{mdframed}
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage{listings}
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{mathtools}
+\usepackage{float}
+\usepackage{fancyvrb} 
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+%% the following commands are needed for some matlab2tikz features
+\usetikzlibrary{plotmarks}
+\usetikzlibrary{arrows.meta}
+\usepgfplotslibrary{patchplots}
+\usepackage{grffile}
+\usepackage{bm}
+\usepackage{amsmath}
+\usetikzlibrary{patterns}
+\usepackage{subcaption}
+\usepackage{rotating}
+\usepackage{lscape}
+\usepackage{standalone}
+\usepackage{enumitem}
+\usepackage{threeparttable}
+\usepackage{shadethm}
+\usepackage{setspace}
+\usepackage{centernot}
+\usepackage{adjustbox}
+\usetikzlibrary{calc,matrix}
+\newshadetheorem{thm}{Theorem}
+\definecolor{shadethmcolor}{HTML}{EDF8FF}
+\definecolor{shaderulecolor}{HTML}{45CFFF}
+\setlength{\shadeboxrule}{.4pt}
+\setlength{\parindent}{5ex}
+\usepackage[section]{placeins}
+
+\makeatletter
+\@addtoreset{equation}{section}
+\@addtoreset{equation}{subsection}
+\@addtoreset{equation}{subsubsection}
+\@addtoreset{equation}{paragraph}
+\@addtoreset{equation}{subparagraph}
+\makeatother
+
+
+\hypersetup{
+	colorlinks = true,
+	urlcolor   = blue,
+	linkcolor  = blue,
+	citecolor  = red
+}
+
+\usepackage{logicproof} 
+\usepackage{tikz} 
+\usetikzlibrary{trees,positioning}
+\usepackage{tikz}
+
+
+\DeclareMathOperator{\di}{d\!}
+\newcommand*\Eval[3]{\left.#1\right\rvert_{#2}^{#3}}
+
+
+% ------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------------
+
+
+
+\title{}
+\author{Problem Set IV - Difference-in-Difference\\
+	\small{\emph{Enrijeta Shino}}}
+
+
+\begin{document}
+	\maketitle
+
+\section{Problem 1: Panel Data}
+
+Take the data set "jtrain1" from \url{http://www.stata.com/texts/eacsap/} This file has data on firms and theamount of job training they get\footnote{See Holzer, H. J., Block, R. N., Cheatham, M., \& Knott, J. H. (1993).  Are training subsidies for firms effective?  TheMichigan experience.ILR Review, 46(4), 625-636.}
+
+\noindent \textbf{1.1:} Use data from 1987 and 1988 only. Construct the difference-in-differences estimator in the following two ways:
+
+\textbf{1.1a:} Construct the four means (control, treatment$\times$before, after) and calculate the differences\footnote{Your results should look similar to the Table 2 in the Holzer et al (1993) paper.}
+\vspace{0.5cm}
+
+
+\begin{table}[]
+		\begin{center}
+	\begin{adjustbox}{angle=90}
+\begin{threeparttable}
+	\centering
+	\caption{Annual Hours of Training per Employee, by Year and Receipt of Grant. (Means and Standard Deviations in Parentheses)}
+	\begin{tabular}{l@{\hskip 0.7in}c@{\hskip 0.7in}c@{\hskip 0.7in}c}
+		\hline
+		Description & 1987 & 1988 & 1989 \\
+		\hline
+		Firms Receiving Grants in 1988 & 7.672 & 35.978 & 10.056 \\
+		& (19.5748) & (36.9560) &(19.4746)\\
+		Firms Receiving Grants in 1989 &  6.125 &  9.316 & 50.650\\
+		& (11.3093) & (17.3605)& (36.2177)\\
+		Firms Not Receiving Grants & 8.889 &   9.671 & 11.594\\
+		& (17.4030) & (18.1773) & (22.3806) \\
+		\hline
+	\end{tabular}
+	 \begin{tablenotes}
+		\small
+		\item Note: The sample sizes for the firms receiving grants in 1988 and firms receiving grants in 1989 are 35 and 28. We replicate Table 2 in Holzer et al. (1993). We are able to exactly match the first two rows of the table however the results are slightly different for the last row but with minor changes. 
+	\end{tablenotes}
+\end{threeparttable}
+	\end{adjustbox}
+\end{center}
+		\end{table}
+
+
+
+\begin{align*}
+DID &= \mathbb{E}\big[Y(i) | T = 1, G = 1 \big] - \mathbb{E}\big[Y(i) | T = 0, G = 1 \big] - \Big\{ \mathbb{E}\big[Y(i) | T = 1, G = 0 \big] - \mathbb{E}\big[Y(i) | T = 0, G = 0 \big] \Big\} \\
+&= 35.978 - 7.672 - 9.671 + 8.889 = \textbf{27.524}
+\end{align*}
+
+\vspace{10cm}
+
+\textbf{1.1.b:} Run the regression
+
+\begin{table}[!htbp] \centering 
+	\caption{} 
+	\label{} 
+	\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+		\\[-1.8ex]\hline 
+		\hline \\[-1.8ex] 
+		& \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+		\cline{2-3} 
+		\\[-1.8ex] & \textbf{log(hrsemp)} & \textbf{hrsemp} \\ 
+		\\[-1.8ex] & (1) & (2)\\ 
+		\hline \\[-1.8ex] 
+		Grant & $-$0.518 & $-$1.667 \\ 
+		& (0.436) & (4.157) \\ 
+		& & \\ 
+		Year1988 & $-$0.391 & 0.332 \\ 
+		& (0.303) & (3.046) \\ 
+		& & \\ 
+		Grant$\times$Year1988 & \textbf{1.809}$^{***}$ & \textbf{27.974}$^{***}$ \\ 
+		& (0.554) & (6.007) \\ 
+		& & \\ 
+		Constant & 2.178$^{***}$ & 9.339$^{***}$ \\ 
+		& (0.227) & (2.165) \\ 
+		& & \\ 
+		\hline \\[-1.8ex] 
+		Observations & 152 & 256 \\ 
+		R$^{2}$ & 0.099 & 0.150 \\ 
+		Adjusted R$^{2}$ & 0.081 & 0.140 \\ 
+		Residual Std. Error & 1.536 (df = 148) & 20.993 (df = 252) \\ 
+		F Statistic & 5.431$^{***}$ (df = 3; 148) & 14.833$^{***}$ (df = 3; 252) \\ 
+		\hline 
+		\hline \\[-1.8ex] 
+		\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+	\end{tabular} 
+\end{table} 
+
+
+
+
+\vspace{10cm}
+
+\textbf{1.2b:} Use the same data from 1987 and 1988.  Run the fixed effect regression ($\alpha_i$ is the unobserved heterogeneity)
+
+\begin{table}[!htbp] \centering 
+	\caption{} 
+	\label{} 
+	\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+		\\[-1.8ex]\hline 
+		\hline \\[-1.8ex] 
+		& \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+		\cline{2-3} 
+		\\[-1.8ex] & log(hrsemp) & hrsemp \\ 
+		\\[-1.8ex] & (1) & (2)\\ 
+		\hline \\[-1.8ex] 
+		Grant & $-$0.825$^{*}$ & $-$3.015 \\ 
+		& (0.462) & (3.854) \\ 
+		& & \\ 
+		Year1988 & $-$0.391 & 0.333 \\ 
+		& (0.311) & (2.523) \\ 
+		& & \\ 
+		Grant$\times$Year1988 & \textbf{1.814}$^{***}$ & \textbf{27.971}$^{***}$ \\ 
+		& (0.537) & (7.787) \\ 
+		& & \\ 
+		Fixed Effects (fcode) & 0.0001$^{**}$ & 0.0004 \\ 
+		& (0.00004) & (0.0003) \\ 
+		& & \\ 
+		Constant & $-$36.002$^{**}$ & $-$177.176 \\ 
+		& (14.916) & (119.876) \\ 
+		& & \\ 
+		\hline \\[-1.8ex] 
+		Observations & 152 & 256 \\ 
+		R$^{2}$ & 0.142 & 0.156 \\ 
+		Adjusted R$^{2}$ & 0.119 & 0.142 \\ 
+		Residual Std. Error & 1.505 (df = 147) & 20.966 (df = 251) \\ 
+		F Statistic & 6.083$^{***}$ (df = 4; 147) & 11.562$^{***}$ (df = 4; 251) \\ 
+		\hline 
+		\hline \\[-1.8ex] 
+		\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+	\end{tabular} 
+\end{table} 
+
+\noindent \textbf{1.3:} Do you get exactly the same answer between 1.1(a,b) and 1.2, why or why not?
+
+No we do not get exactly the same answer on the interaction term as in part 1.1(a,b) when compared to 1.2, but the answers are very close. The estimated coefficient on the interaction which represents the DID estimate is lower when compared to both parts 1.1(a,b). The reason is that we did not consider the fact that firms may be different for reasons unobservable to the econometrician however we control for firms fixed effects under the assumptions that they do not change over time. (e.g. we cannot observe if some firms are more experienced and have better managerial skills than other firms.). 
+
+\vspace{3cm}
+
+
+
+
+
+
+
+
+
+\end{document}	
